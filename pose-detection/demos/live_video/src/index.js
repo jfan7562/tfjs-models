@@ -15,26 +15,28 @@
  * =============================================================================
  */
 
-import '@tensorflow/tfjs-backend-webgl';
-import '@mediapipe/pose';
+import "@tensorflow/tfjs-backend-webgl";
+import "@mediapipe/pose";
 
-import * as tfjsWasm from '@tensorflow/tfjs-backend-wasm';
+import * as tfjsWasm from "@tensorflow/tfjs-backend-wasm";
 
 tfjsWasm.setWasmPaths(
-    `https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@${
-        tfjsWasm.version_wasm}/dist/`);
+  `https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@${tfjsWasm.version_wasm}/dist/`
+);
 
-import * as posedetection from '@tensorflow-models/pose-detection';
+import * as posedetection from "@tensorflow-models/pose-detection";
 
-import {Camera} from './camera';
-import {setupDatGui} from './option_panel';
-import {STATE} from './params';
-import {setupStats} from './stats_panel';
-import {setBackendAndEnvFlags} from './util';
+import { Camera } from "./camera";
+import { setupDatGui } from "./option_panel";
+import { STATE } from "./params";
+import { setupStats } from "./stats_panel";
+import { setBackendAndEnvFlags } from "./util";
 
 let detector, camera, stats;
-let startInferenceTime, numInferences = 0;
-let inferenceTimeSum = 0, lastPanelUpdate = 0;
+let startInferenceTime,
+  numInferences = 0;
+let inferenceTimeSum = 0,
+  lastPanelUpdate = 0;
 let rafId;
 
 async function createDetector() {
@@ -42,37 +44,41 @@ async function createDetector() {
     case posedetection.SupportedModels.PoseNet:
       return posedetection.createDetector(STATE.model, {
         quantBytes: 4,
-        architecture: 'MobileNetV1',
+        architecture: "MobileNetV1",
         outputStride: 16,
-        inputResolution: {width: 500, height: 500},
-        multiplier: 0.75
+        inputResolution: { width: 500, height: 500 },
+        multiplier: 0.75,
       });
     case posedetection.SupportedModels.BlazePose:
-      const runtime = STATE.backend.split('-')[0];
-      if (runtime === 'mediapipe') {
+      const runtime = STATE.backend.split("-")[0];
+      if (runtime === "mediapipe") {
         return posedetection.createDetector(STATE.model, {
           runtime,
           modelType: STATE.modelConfig.type,
-          solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.4'
+          solutionPath: "https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.4",
         });
-      } else if (runtime === 'tfjs') {
-        return posedetection.createDetector(
-            STATE.model, {runtime, modelType: STATE.modelConfig.type});
+      } else if (runtime === "tfjs") {
+        return posedetection.createDetector(STATE.model, {
+          runtime,
+          modelType: STATE.modelConfig.type,
+        });
       }
     case posedetection.SupportedModels.MoveNet:
       let modelType;
-      if (STATE.modelConfig.type == 'lightning') {
+      if (STATE.modelConfig.type == "lightning") {
         modelType = posedetection.movenet.modelType.SINGLEPOSE_LIGHTNING;
-      } else if (STATE.modelConfig.type == 'thunder') {
+      } else if (STATE.modelConfig.type == "thunder") {
         modelType = posedetection.movenet.modelType.SINGLEPOSE_THUNDER;
-      } else if (STATE.modelConfig.type == 'multipose') {
+      } else if (STATE.modelConfig.type == "multipose") {
         modelType = posedetection.movenet.modelType.MULTIPOSE;
       }
-      if (STATE.modelConfig.customModel !== '') {
-        return posedetection.createDetector(
-            STATE.model, {modelType, modelUrl: STATE.modelConfig.customModel});
+      if (STATE.modelConfig.customModel !== "") {
+        return posedetection.createDetector(STATE.model, {
+          modelType,
+          modelUrl: STATE.modelConfig.customModel,
+        });
       }
-      return posedetection.createDetector(STATE.model, {modelType});
+      return posedetection.createDetector(STATE.model, { modelType });
   }
 }
 
@@ -124,7 +130,9 @@ function endEstimatePosesStats() {
     inferenceTimeSum = 0;
     numInferences = 0;
     stats.customFpsPanel.update(
-        1000.0 / averageInferenceTime, 120 /* maxValue */);
+      1000.0 / averageInferenceTime,
+      120 /* maxValue */
+    );
     lastPanelUpdate = endInferenceTime;
   }
 }
@@ -144,21 +152,22 @@ async function renderResult() {
   // from a URL that does not exist).
   if (detector != null) {
     // FPS only counts the time it takes to finish estimatePoses.
-    beginEstimatePosesStats();
+    //beginEstimatePosesStats();
 
     // Detectors can throw errors, for example when using custom URLs that
     // contain a model that doesn't provide the expected output.
     try {
-      poses = await detector.estimatePoses(
-          camera.video,
-          {maxPoses: STATE.modelConfig.maxPoses, flipHorizontal: false});
+      poses = await detector.estimatePoses(camera.video, {
+        maxPoses: STATE.modelConfig.maxPoses,
+        flipHorizontal: false,
+      });
     } catch (error) {
       detector.dispose();
       detector = null;
       alert(error);
     }
 
-    endEstimatePosesStats();
+    //endEstimatePosesStats();
   }
 
   camera.drawCtx();
@@ -179,19 +188,19 @@ async function renderPrediction() {
   }
 
   rafId = requestAnimationFrame(renderPrediction);
-};
+}
 
 async function app() {
   // Gui content will change depending on which model is in the query string.
   const urlParams = new URLSearchParams(window.location.search);
-  if (!urlParams.has('model')) {
-    alert('Cannot find model in the query string.');
+  if (!urlParams.has("model")) {
+    alert("Cannot find model in the query string.");
     return;
   }
 
   await setupDatGui(urlParams);
 
-  stats = setupStats();
+  //stats = setupStats();
 
   camera = await Camera.setupCamera(STATE.camera);
 
@@ -200,6 +209,6 @@ async function app() {
   detector = await createDetector();
 
   renderPrediction();
-};
+}
 
 app();
