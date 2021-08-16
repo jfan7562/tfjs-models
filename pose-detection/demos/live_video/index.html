@@ -11,57 +11,55 @@ limitations under the License.
 ==============================================================================-->
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width,initial-scale=1,maximum-scale=1.0, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0, user-scalable=no" />
     <style>
-      body {
-        margin: 0;
-      }
-      #stats {
-        position: relative;
-        width: 100%;
-        height: 80px;
-      }
-      #main {
-        position: relative;
-        margin: 0;
-      }
-      #canvas-wrapper,
-      #scatter-gl-container {
-        position: relative;
-      }
+        body {
+            margin: 0;
+        }
+        
+        #stats {
+            position: relative;
+            width: 100%;
+            height: 80px;
+        }
+        
+        #main {
+            position: relative;
+            margin: 0;
+        }
+        
+        #canvas-wrapper,
+        #scatter-gl-container {
+            position: relative;
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <div id="stats"></div>
     <div id="main">
-      <div class="container">
-        <div class="canvas-wrapper">
-          <canvas id="output"></canvas>
-          <video
-            id="video"
-            playsinline
-            style="
+        <div class="container">
+            <div class="canvas-wrapper">
+                <canvas id="output"></canvas>
+                <video id="video" playsinline style="
               -webkit-transform: scaleX(-1);
               transform: scaleX(-1);
               display: none;
               width: auto;
               height: auto;
-            "
-          ></video>
+            "></video>
+            </div>
+            <div id="scatter-gl-container"></div>
         </div>
-        <div id="scatter-gl-container"></div>
-      </div>
     </div>
-  </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
-  <script src="src/index.js"></script>
-  <script>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
+<script src="src/index.js"></script>
+<script>
     //I want to get the dimensions of the full screen compared to the initial camera size and scale accordingly
     //Generalize margin center video
     //Get fullY correct - this is the only problem!
@@ -80,5 +78,6 @@ limitations under the License.
     element.style.webkitTransform = scaleString;
     marginLeftAmount = (fullX / 6).toString() + "px";
     element.style.marginLeft = marginLeftAmount;
-  </script>
+</script>
+
 </html>

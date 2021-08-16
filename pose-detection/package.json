@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@babel/polyfill": "^7.10.4",
-    "@mediapipe/pose": "~0.4.0",
+    "@mediapipe/pose": "^0.4.1627931336",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@rollup/plugin-typescript": "^3.0.0",
@@ -67,6 +67,9 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "rimraf": "^3.0.2"
+    "@tensorflow-models/posenet": "^2.2.2",
+    "node": "^16.6.1",
+    "rimraf": "^3.0.2",
+    "yarn": "^1.22.11"
   }
 }
