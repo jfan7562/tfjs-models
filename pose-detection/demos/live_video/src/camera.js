@@ -162,7 +162,7 @@ export class Camera {
 
         if (pose.keypoints != null) {
             this.drawKeypoints(pose.keypoints);
-            this.drawSkeleton(pose.keypoints);
+            this.drawSkeleton(pose.keypoints, "Lime");
         }
     }
 
@@ -210,9 +210,9 @@ export class Camera {
      * Draw the skeleton of a body on the video.
      * @param keypoints A list of keypoints.
      */
-    drawSkeleton(keypoints) {
-        this.ctx.fillStyle = "White";
-        this.ctx.strokeStyle = "White";
+    drawSkeleton(keypoints, col = "White") {
+        this.ctx.fillStyle = col;
+        this.ctx.strokeStyle = col;
         this.ctx.lineWidth = params.DEFAULT_LINE_WIDTH;
 
         posedetection.util
