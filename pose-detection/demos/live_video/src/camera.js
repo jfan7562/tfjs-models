@@ -44,6 +44,8 @@ export class Camera {
         this.scatterGLHasInitialized = false;
 
         this.frameCount = 0;
+
+        this.circles = [];
     }
 
     /**
@@ -114,6 +116,59 @@ export class Camera {
         return camera;
     }
 
+    indicate(x, y, s = 50, spawnDelay = 0, delays = 0.2) {
+        setTimeout(() => {
+            this.circles.push({
+                x: x,
+                y: y,
+                t: 0,
+                r: s
+            })
+
+            setTimeout(() => {
+                this.circles.push({
+                    x: x,
+                    y: y,
+                    t: 0,
+                    r: s / 2
+                })
+            }, delays * 1000)
+
+            setTimeout(() => {
+                this.circles.push({
+                    x: x,
+                    y: y,
+                    t: 0,
+                    r: s / 4
+                })
+            }, delays * 2000)
+
+        }, spawnDelay * 1000)
+    }
+
+    drawIndicators() {
+        this.ctx.fillStyle = "#fff";
+        this.ctx.strokeStyle = "#fff";
+        this.ctx.shadowBlur = 3;
+        this.ctx.shadowColor = "#000"
+        this.ctx.shadowOffsetX = 3;
+        this.ctx.shadowOffsetY = 3;
+
+        for (var i = 0; i < this.circles.length; i++) {
+            var c = circles[i]
+            if (c.t > 60) {
+                circles.splice(c, 1);
+                i--;
+            }
+
+            var r = c.r * Math.sin(c.t * Math.PI / 60);
+            this.ctx.ellipse(c.x, c.y, r, r, 0, 0, 2 * Math.PI)
+            c.t++;
+        }
+
+        ctx.shadowBlur = 0;
+    }
+
     drawCtx() {
         this.ctx.drawImage(
             this.video,
@@ -124,6 +179,7 @@ export class Camera {
         );
 
         this.frameCount++;
+        this.drawIndicators();
     }
 
     clearCtx() {
