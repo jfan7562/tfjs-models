@@ -170,6 +170,7 @@ async function renderResult() {
         //endEstimatePosesStats();
     }
 
+    window.cam = camera;
     camera.drawCtx();
 
     // The null check makes sure the UI is not in the middle of changing to a
@@ -179,6 +180,8 @@ async function renderResult() {
         camera.drawResults(poses);
         camera.drawIdeal();
     }
+
+    camera.drawIndicators();
 }
 
 async function renderPrediction() {

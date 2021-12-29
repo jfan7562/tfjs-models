@@ -155,18 +155,22 @@ export class Camera {
         this.ctx.shadowOffsetY = 3;
 
         for (var i = 0; i < this.circles.length; i++) {
-            var c = circles[i]
+            var c = this.circles[i]
             if (c.t > 60) {
-                circles.splice(c, 1);
+                this.circles.splice(c, 1);
                 i--;
             }
 
-            var r = c.r * Math.sin(c.t * Math.PI / 60);
-            this.ctx.ellipse(c.x, c.y, r, r, 0, 0, 2 * Math.PI)
+            var r = Math.max(c.r * Math.sin(c.t * Math.PI / 60), 1);
+            const circle = new Path2D();
+            circle.arc(c.x, c.y, r, 0, 2 * Math.PI);
+            this.ctx.fill(circle);
+            this.ctx.stroke(circle);
+
             c.t++;
         }
 
-        ctx.shadowBlur = 0;
+        this.ctx.shadowBlur = 0;
     }
 
     drawCtx() {
@@ -179,7 +183,6 @@ export class Camera {
         );
 
         this.frameCount++;
-        this.drawIndicators();
     }
 
     clearCtx() {

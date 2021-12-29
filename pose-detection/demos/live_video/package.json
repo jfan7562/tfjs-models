@@ -18,7 +18,7 @@
     "@tensorflow/tfjs-core": "^3.8.0",
     "require": "^2.4.20",
     "scatter-gl": "0.0.8",
-    "yarn": "^1.22.11"
+    "yarn": "^1.22.17"
   },
   "scripts": {
     "watch": "cross-env NODE_ENV=development parcel index.html --no-hmr --open",
