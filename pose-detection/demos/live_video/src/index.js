@@ -170,7 +170,9 @@ async function renderResult() {
         //endEstimatePosesStats();
     }
 
-    window.cam = camera;
+    if (window.cam == undefined) {
+        window.cam = camera;
+    }
     camera.drawCtx();
 
     // The null check makes sure the UI is not in the middle of changing to a
